@@ -1,6 +1,6 @@
 # LibProton
 
-[![Build Status](https://travis-ci.org/PeterJCLaw/libproton.png)](https://travis-ci.org/PeterJCLaw/libproton)
+[![CircleCI](https://circleci.com/gh/PeterJCLaw/libproton.svg?style=svg)](https://circleci.com/gh/PeterJCLaw/libproton)
 
 This is a library which simplifies the task of creating
 [Proton](https://github.com/PeterJCLaw/proton) compliant scoring scripts.

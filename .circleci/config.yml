@@ -1,0 +1,85 @@
+version: 2
+
+workflows:
+  version: 2
+  build-and-test:
+    jobs:
+      - build-27
+      - build-34
+      - build-35
+      - build-36
+      - build-37
+
+jobs:
+  build-27:
+    docker:
+      - image: circleci/python:2.7
+
+    steps:
+      - checkout
+
+        # Set up a cached virtualenv in which to install
+      - restore_cache:
+          name: Restore build dependency cache
+          key: deps-venv-{{ .Branch }}-{{ .Environment.CIRCLE_JOB }}-v1
+      - run:
+          name: Install dependencies
+          command: |
+            python -m virtualenv venv
+            . venv/bin/activate
+            pip install PyYAML mock nose
+      - save_cache:
+          name: Save build dependency cache
+          key: deps-venv-{{ .Branch }}-{{ .Environment.CIRCLE_JOB }}-v1
+          paths:
+            - "venv"
+
+      - run:
+          name: Tests
+          command: |
+            . venv/bin/activate
+            nosetests
+
+  build-34: &build-template
+    docker:
+      - image: circleci/python:3.4
+
+    steps:
+      - checkout
+
+        # Set up a cached virtualenv in which to install
+      - restore_cache:
+          name: Restore build dependency cache
+          key: deps-venv-{{ .Branch }}-{{ .Environment.CIRCLE_JOB }}-v1
+      - run:
+          name: Install dependencies
+          command: |
+            python -m venv venv
+            . venv/bin/activate
+            pip install PyYAML mock nose
+      - save_cache:
+          name: Save build dependency cache
+          key: deps-venv-{{ .Branch }}-{{ .Environment.CIRCLE_JOB }}-v1
+          paths:
+            - "venv"
+
+      - run:
+          name: Tests
+          command: |
+            . venv/bin/activate
+            nosetests
+
+  build-35:
+    <<: *build-template
+    docker:
+      - image: circleci/python:3.5
+
+  build-36:
+    <<: *build-template
+    docker:
+      - image: circleci/python:3.6
+
+  build-37:
+    <<: *build-template
+    docker:
+      - image: circleci/python:3.7
