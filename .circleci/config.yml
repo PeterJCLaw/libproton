@@ -38,7 +38,7 @@ jobs:
           name: Tests
           command: |
             . venv/bin/activate
-            nosetests
+            python setup.py test
 
   build-34: &build-template
     docker:
@@ -67,7 +67,7 @@ jobs:
           name: Tests
           command: |
             . venv/bin/activate
-            nosetests
+            python setup.py test
 
   build-35:
     <<: *build-template

@@ -17,5 +17,6 @@ setup(
         'nose >=1.3, <2',
         'mock >=1.0.1, <2',
     ],
+    test_suite='nose.collector',
     zip_safe=True,
 )
