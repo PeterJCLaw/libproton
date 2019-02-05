@@ -11,7 +11,7 @@ setup(
     author="Peter Law",
     author_email="PeterJCLaw@gmail.com",
     install_requires=[
-        'PyYAML >=3.11, <4',
+        'PyYAML >=3.11, <5',
     ],
     tests_require=[
         'nose >=1.3, <2',
