@@ -24,7 +24,8 @@ def get_data(data_root, input_name):
 
     assert os.path.exists(output_file), "Missing output expectation '{1}' for input '{0}'.".format(input_name, output_file)
 
-    expected_output = yaml.load(open(output_file).read())
+    with open(output_file) as f:
+        expected_output = yaml.load(f)
     return input_file, expected_output
 
 def get_input_files(data_root):

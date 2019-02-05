@@ -18,18 +18,17 @@ def run(relative_path):
     bacon_scorer = get_bacon_scorer()
     process = subprocess.Popen([bacon_scorer,  relative_path], \
                                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    retcode = process.wait()
-    return retcode, process
+    stdout, stderr = process.communicate()
+    return process.returncode, stdout, stderr
 
 def assert_run(relative_path):
-    retcode, process = run(relative_path)
+    retcode, stdout, stderr = run(relative_path)
     if retcode != 0:
-        print(process.stderr.read())
+        print(stderr)
 
     assert retcode == 0, "Bad return code scoring '{0}'.".format(relative_path)
 
-    result = process.stdout.read()
-    result_dict = yaml.load(result)
+    result_dict = yaml.load(stdout)
     return result_dict
 
 def check_by_input_file(input_name):
@@ -49,25 +48,25 @@ def test_stdin():
     # A proton compliant program MUST consume YAML from stdin
     # if it is not given a filename.
 
-    zeros_input = open('test/data/cli/zero.yaml', 'r')
-    zeros_output = yaml.load(open('test/data/cli/zero.out.yaml').read())
+    with open('test/data/cli/zero.yaml', 'r') as zeros_input:
+        with open('test/data/cli/zero.out.yaml') as f:
+            zeros_output = yaml.load(f)
 
-    bacon_scorer = get_bacon_scorer()
-    process = subprocess.Popen([bacon_scorer], stdin=zeros_input, \
-                               stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    retcode = process.wait()
-    if retcode != 0:
-        print(process.stderr.read())
+        bacon_scorer = get_bacon_scorer()
+        process = subprocess.Popen([bacon_scorer], stdin=zeros_input, \
+                                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = process.communicate()
+        if process.returncode != 0:
+            print(stderr)
 
-    assert retcode == 0, "Bad return code scoring from stdin."
+        assert process.returncode == 0, "Bad return code scoring from stdin."
 
-    result = process.stdout.read()
-    result_dict = yaml.load(result)
+        result_dict = yaml.load(stdout)
 
-    assert result_dict == zeros_output, "Bad output when reading from stdin"
+        assert result_dict == zeros_output, "Bad output when reading from stdin"
 
 def test_missing_file():
     nope = 'bacon'
     assert not os.path.exists(nope)
-    retcode, process = run(nope)
+    retcode, _, _ = run(nope)
     assert retcode == 1, "Should error when nonexistent input file '{}' is provided.".format(nope)
