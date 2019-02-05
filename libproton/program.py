@@ -9,7 +9,7 @@ from .proton_helper import ProtonHelper
 
 
 def generate_output(file_reader, scorer_cls, stderr):
-    helper = ProtonHelper(yaml.load)
+    helper = ProtonHelper(yaml.safe_load)
 
     # Load also validates the input as far as possible
     helper.load(file_reader.read())
@@ -52,4 +52,4 @@ def get_reader(args, reader):
 def main(scorer, io = sys):
     reader = get_reader(io.argv, io.stdin)
     output = generate_output(reader, scorer, io.stderr)
-    yaml.dump(output, io.stdout)
+    yaml.safe_dump(output, io.stdout)
