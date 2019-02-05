@@ -5,7 +5,7 @@ with open('README.md') as f:
 
 setup(
     name="libproton",
-    version="3.0",
+    version="3.0.1",
     packages=find_packages(),
     description=description,
     author="Peter Law",
