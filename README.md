@@ -5,7 +5,7 @@
 This is a library which simplifies the task of creating
 [Proton](https://github.com/PeterJCLaw/proton) compliant scoring scripts.
 
-It supports Python 2.7 and 3.x.
+It supports Python 3.7+.
 
 ## API
 
