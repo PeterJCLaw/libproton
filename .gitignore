@@ -4,3 +4,4 @@
 libproton.egg-info
 dist
 build
+.eggs
