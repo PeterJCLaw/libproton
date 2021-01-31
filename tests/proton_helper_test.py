@@ -1,62 +1,46 @@
+import unittest
 from unittest import mock
 
 import helpers
 from libproton import ProtonHelper
 
 
-def assert_load(data_to_load):
-    mock_loader = mock.Mock()
-    mock_loader.return_value = data_to_load
-    ph = ProtonHelper(mock_loader)
+class ProtonHelperTests(unittest.TestCase):
+    def assertLoad(self, data_to_load):
+        mock_loader = mock.Mock()
+        mock_loader.return_value = data_to_load
+        ph = ProtonHelper(mock_loader)
 
-    input_ = 'bacon'
-    ph.load(input_)
+        input_ = 'bacon'
+        ph.load(input_)
 
-    mock_loader.assert_called_once_with(input_)
+        mock_loader.assert_called_once_with(input_)
 
-    return ph
+        return ph
 
-
-def test_load():
-    loaded_data = {
-        'arena_id': 'A',
-        'match_number': 1,
-        'teams': {
-            'TLA1': {
-                'zone': 0,
+    def test_load(self):
+        loaded_data = {
+            'arena_id': 'A',
+            'match_number': 1,
+            'teams': {
+                'TLA1': {
+                    'zone': 0,
+                },
+                'TLA2': {
+                    'zone': 2,
+                },
             },
-            'TLA2': {
-                'zone': 2,
-            },
-        },
-    }
+        }
 
-    assert_load(loaded_data)
+        self.assertLoad(loaded_data)
 
-
-def test_team_scoresheets():
-    teams_data_complete = {
-        'TLA1': {
-            'zone': 0,
-            'bacon': 4,
-            'present': True,
-            'disqualified': False,
-        },
-        'TLA2': {
-            'zone': 2,
-            'bacon': 13,
-            'present': False,
-            'disqualified': True,
-        },
-    }
-    loaded_data = {
-        'arena_id': 'A',
-        'match_number': 1,
-        'teams': {
+    def test_team_scoresheets(self):
+        teams_data_complete = {
             'TLA1': {
                 'zone': 0,
                 'bacon': 4,
-                # defaults
+                'present': True,
+                'disqualified': False,
             },
             'TLA2': {
                 'zone': 2,
@@ -64,159 +48,173 @@ def test_team_scoresheets():
                 'present': False,
                 'disqualified': True,
             },
-        },
-    }
-
-    ph = assert_load(loaded_data)
-
-    team_scoresheets = ph.team_scoresheets
-
-    assert team_scoresheets == teams_data_complete
-
-
-def test_extra_data():
-    extra_data = 'extra_data'
-    loaded_data = {
-        'arena_id': 'A',
-        'match_number': 1,
-        'teams': {
-            'TLA1': {
-                'zone': 0,
-                'bacon': 4,
-                # defaults
+        }
+        loaded_data = {
+            'arena_id': 'A',
+            'match_number': 1,
+            'teams': {
+                'TLA1': {
+                    'zone': 0,
+                    'bacon': 4,
+                    # defaults
+                },
+                'TLA2': {
+                    'zone': 2,
+                    'bacon': 13,
+                    'present': False,
+                    'disqualified': True,
+                },
             },
-            'TLA2': {
-                'zone': 2,
-                'bacon': 13,
-                'present': False,
-                'disqualified': True,
+        }
+
+        ph = self.assertLoad(loaded_data)
+
+        team_scoresheets = ph.team_scoresheets
+
+        self.assertEqual(teams_data_complete, team_scoresheets)
+
+    def test_extra_data(self):
+        extra_data = 'extra_data'
+        loaded_data = {
+            'arena_id': 'A',
+            'match_number': 1,
+            'teams': {
+                'TLA1': {
+                    'zone': 0,
+                    'bacon': 4,
+                    # defaults
+                },
+                'TLA2': {
+                    'zone': 2,
+                    'bacon': 13,
+                    'present': False,
+                    'disqualified': True,
+                },
             },
-        },
-        'other': extra_data,
-    }
+            'other': extra_data,
+        }
 
-    ph = assert_load(loaded_data)
+        ph = self.assertLoad(loaded_data)
 
-    actual_data = ph.extra_data
+        actual_data = ph.extra_data
 
-    assert extra_data == actual_data
+        self.assertEqual(extra_data, actual_data)
 
-
-def test_no_extra_data():
-    loaded_data = {
-        'arena_id': 'A',
-        'match_number': 1,
-        'teams': {
-            'TLA1': {
-                'zone': 0,
-                'bacon': 4,
-                # defaults
+    def test_no_extra_data(self):
+        loaded_data = {
+            'arena_id': 'A',
+            'match_number': 1,
+            'teams': {
+                'TLA1': {
+                    'zone': 0,
+                    'bacon': 4,
+                    # defaults
+                },
+                'TLA2': {
+                    'zone': 2,
+                    'bacon': 13,
+                    'present': False,
+                    'disqualified': True,
+                },
             },
-            'TLA2': {
-                'zone': 2,
-                'bacon': 13,
-                'present': False,
-                'disqualified': True,
+        }
+
+        ph = self.assertLoad(loaded_data)
+
+        actual_data = ph.extra_data
+
+        self.assertIsNone(actual_data, "Should return None when no extra data")
+
+    def test_arena_data(self):
+        arena_data = 'arena_data'
+        loaded_data = {
+            'arena_id': 'A',
+            'match_number': 1,
+            'teams': {
+                'TLA1': {
+                    'zone': 0,
+                    'bacon': 4,
+                    # defaults
+                },
+                'TLA2': {
+                    'zone': 2,
+                    'bacon': 13,
+                    'present': False,
+                    'disqualified': True,
+                },
             },
-        },
-    }
+            'arena_zones': arena_data,
+        }
 
-    ph = assert_load(loaded_data)
+        ph = self.assertLoad(loaded_data)
 
-    actual_data = ph.extra_data
+        actual_data = ph.arena_data
 
-    assert actual_data is None, "Should return None when no extra data"
+        self.assertEqual(arena_data, actual_data)
 
-
-def test_arena_data():
-    arena_data = 'arena_data'
-    loaded_data = {
-        'arena_id': 'A',
-        'match_number': 1,
-        'teams': {
-            'TLA1': {
-                'zone': 0,
-                'bacon': 4,
-                # defaults
+    def test_no_arena_data(self):
+        loaded_data = {
+            'arena_id': 'A',
+            'match_number': 1,
+            'teams': {
+                'TLA1': {
+                    'zone': 0,
+                    'bacon': 4,
+                    # defaults
+                },
+                'TLA2': {
+                    'zone': 2,
+                    'bacon': 13,
+                    'present': False,
+                    'disqualified': True,
+                },
             },
-            'TLA2': {
-                'zone': 2,
-                'bacon': 13,
-                'present': False,
-                'disqualified': True,
+        }
+
+        ph = self.assertLoad(loaded_data)
+
+        actual_data = ph.arena_data
+
+        self.assertIsNone(actual_data, "Should return None when no arena data")
+
+    def test_produce(self):
+        input_ = {
+            'arena_id': 'A',
+            'match_number': 1,
+            'teams': {
+                'TLA1': {
+                    'zone': 0,
+                },
+                'TLA2': {
+                    'zone': 2,
+                    'present': False,
+                    'disqualified': True,
+                },
             },
-        },
-        'arena_zones': arena_data,
-    }
+        }
 
-    ph = assert_load(loaded_data)
+        mock_loader = mock.Mock()
+        mock_loader.return_value = input_
+        ph = ProtonHelper(mock_loader)
+        ph.load(None)
 
-    actual_data = ph.arena_data
+        scores = {'TLA1': 0, 'TLA2': 13}
 
-    assert arena_data == actual_data
+        whole = ph.produce(scores)
 
-
-def test_no_arena_data():
-    loaded_data = {
-        'arena_id': 'A',
-        'match_number': 1,
-        'teams': {
-            'TLA1': {
-                'zone': 0,
-                'bacon': 4,
-                # defaults
+        self.assertEqual('3.0.0-rc2', whole['version'])
+        self.assertEqual(1, whole['match_number'])
+        self.assertEqual('A', whole['arena_id'])
+        self.assertEqual(
+            {
+                'TLA1': helpers.tla_result_fixture(0, 0),
+                'TLA2': {
+                    'score': 13,
+                    'zone': 2,
+                    # while not sane these are expected to be pass-through
+                    'present': False,
+                    'disqualified': True,
+                },
             },
-            'TLA2': {
-                'zone': 2,
-                'bacon': 13,
-                'present': False,
-                'disqualified': True,
-            },
-        },
-    }
-
-    ph = assert_load(loaded_data)
-
-    actual_data = ph.arena_data
-
-    assert actual_data is None, "Should return None when no arena data"
-
-
-def test_produce():
-    input_ = {
-        'arena_id': 'A',
-        'match_number': 1,
-        'teams': {
-            'TLA1': {
-                'zone': 0,
-            },
-            'TLA2': {
-                'zone': 2,
-                'present': False,
-                'disqualified': True,
-            },
-        },
-    }
-
-    mock_loader = mock.Mock()
-    mock_loader.return_value = input_
-    ph = ProtonHelper(mock_loader)
-    ph.load(None)
-
-    scores = {'TLA1': 0, 'TLA2': 13}
-
-    whole = ph.produce(scores)
-
-    assert whole['version'] == '3.0.0-rc2'
-    assert whole['match_number'] == 1
-    assert whole['arena_id'] == 'A'
-    assert whole['scores'] == {
-        'TLA1': helpers.tla_result_fixture(0, 0),
-        'TLA2': {
-            'score': 13,
-            'zone': 2,
-            # while not sane these are expected to be pass-through
-            'present': False,
-            'disqualified': True,
-        },
-    }
+            whole['scores'],
+        )
