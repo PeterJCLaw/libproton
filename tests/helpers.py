@@ -1,22 +1,27 @@
 
 import os
 import sys
+
 import yaml
+
 
 def root():
     mydir = os.path.dirname(os.path.realpath(__file__))
     return os.path.dirname(mydir)
 
+
 def path_bodge():
     sys.path.insert(0, root())
 
-def tla_result_fixture(zone_number, score = 0):
+
+def tla_result_fixture(zone_number, score=0):
     return {
         "score": score,
         "present": True,
         "disqualified": False,
         "zone": zone_number,
     }
+
 
 def get_data(data_root, input_name):
     input_file = os.path.join(root(), data_root, input_name)
@@ -27,6 +32,7 @@ def get_data(data_root, input_name):
     with open(output_file) as f:
         expected_output = yaml.load(f)
     return input_file, expected_output
+
 
 def get_input_files(data_root):
     files = os.listdir(os.path.join(root(), data_root))

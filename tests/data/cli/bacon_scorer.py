@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 
-from os.path import dirname, realpath
 import sys
+from os.path import dirname, realpath
 
 path = dirname(dirname(dirname(dirname(realpath(__file__)))))
 sys.path.insert(0, path)
 
-import libproton
+import libproton  # isort:skip
+
 
 class Scorer:
     def __init__(self, teams_data, arena_data):

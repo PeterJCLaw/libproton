@@ -1,8 +1,10 @@
 
 import copy
 
+
 class ProtonHelper:
     version = "3.0.0-rc2"
+
     def __init__(self, loader):
         self._loader = loader
 
@@ -25,10 +27,10 @@ class ProtonHelper:
     def produce(self, team_scores):
         whole_scores = self.generate_whole_scores(team_scores)
         return {
-            "version"      : self.version,
-            "match_number" : self._input["match_number"],
-            "arena_id"     : self._input["arena_id"],
-            "scores"       : whole_scores,
+            "version": self.version,
+            "match_number": self._input["match_number"],
+            "arena_id": self._input["arena_id"],
+            "scores": whole_scores,
         }
 
     def _fill_defaults(self, teams_data):
@@ -41,10 +43,10 @@ class ProtonHelper:
         whole = {}
         for tla, team_data in self._input["teams"].items():
             whole[tla] = {
-                "zone"          : team_data["zone"],
-                "present"       : team_data["present"],
-                "disqualified"  : team_data["disqualified"],
-                "score"         : team_scores[tla],
+                "zone": team_data["zone"],
+                "present": team_data["present"],
+                "disqualified": team_data["disqualified"],
+                "score": team_scores[tla],
             }
 
         return whole

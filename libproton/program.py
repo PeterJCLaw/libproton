@@ -3,6 +3,7 @@ from __future__ import print_function
 
 import sys
 import traceback
+
 import yaml
 
 from .proton_helper import ProtonHelper
@@ -15,8 +16,8 @@ def generate_output(file_reader, scorer_cls, stderr):
     helper.load(file_reader.read())
 
     team_scoresheets = helper.team_scoresheets
-    arena_data       = helper.arena_data
-    extra_data       = helper.extra_data
+    arena_data = helper.arena_data
+    extra_data = helper.extra_data
 
     scores = None
     try:
@@ -35,6 +36,7 @@ def generate_output(file_reader, scorer_cls, stderr):
     assert scores is not None
     return helper.produce(scores)
 
+
 def get_reader(args, reader):
 
     if len(args) == 1:
@@ -49,7 +51,8 @@ def get_reader(args, reader):
 
     return reader
 
-def main(scorer, io = sys):
+
+def main(scorer, io=sys):
     reader = get_reader(io.argv, io.stdin)
     output = generate_output(reader, scorer, io.stderr)
     yaml.safe_dump(output, io.stdout)
