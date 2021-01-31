@@ -29,7 +29,7 @@ def generate_output(file_reader, scorer_cls, stderr):
         # which come from inside the method.
         if hasattr(scorer, 'validate'):
             scorer.validate(extra_data)
-    except:
+    except BaseException:
         print(traceback.format_exc(), file=stderr)
         exit(2)
 
