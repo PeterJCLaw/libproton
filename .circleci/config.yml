@@ -1,85 +1,154 @@
-version: 2
+version: 2.1
 
-workflows:
-  version: 2
-  build-and-test:
-    jobs:
-      - build-27
-      - build-34
-      - build-35
-      - build-36
-      - build-37
+references:
+  build-checksum-file: &build-checksum-file
+    run:
+      name: Build checksum file
+      command: |
+        declare -a FILES=(
+          "script/linting/requirements.txt"
+        )
+        for f in ${FILES[@]}
+        do
+          echo "# $f" >> all-requirements.txt
+          cat $f >> all-requirements.txt
+        done
+
+        echo "# self" >> all-requirements.txt
+        echo "." >> all-requirements.txt
+
+        declare -a FILES=(
+          "setup.py"
+          "all-requirements.txt"
+        )
+        for f in ${FILES[@]}
+        do
+          echo "# $f" >> .checksum
+          cat $f >> .checksum
+        done
+  restore-dependencies-cache: &restore-dependencies-cache
+    restore_cache:
+      keys:
+        - deps-1-py<< parameters.version >>-{{ checksum ".checksum" }}
+  install-dependencies: &install-dependencies
+    run:
+      name: Install Dependencies
+      command: |
+        python3 -m venv venv
+        venv/bin/pip install -r all-requirements.txt
+  save-dependencies-cache: &save-dependencies-cache
+    save_cache:
+      key: deps-1-py<< parameters.version >>-{{ checksum ".checksum" }}
+      paths:
+        - venv
+  parametrised-python-executor: &parametrised-python-executor
+    parameters:
+      version:
+        type: string
+    executor:
+      name: python
+      version: << parameters.version >>
+  python-full-version-matrix: &python-full-version-matrix
+    matrix:
+      parameters:
+        version: ["3.5", "3.6", "3.7", "3.8"]
+  python-top-and-bottom-version-matrix: &python-top-and-bottom-version-matrix
+    matrix:
+      parameters:
+        version: ["3.5", "3.8"]
+  filter-tags: &filter-tags
+    filters:
+      branches:
+        ignore: /.*/
+      tags:
+        only: /^v.*/
+
+
+executors:
+  python:
+    parameters:
+      version:
+        type: string
+    docker:
+      - image: circleci/python:<< parameters.version >>
+
 
 jobs:
-  build-27:
-    docker:
-      - image: circleci/python:2.7
+  test:
+    <<: *parametrised-python-executor
 
     steps:
       - checkout
 
-        # Set up a cached virtualenv in which to install
-      - restore_cache:
-          name: Restore build dependency cache
-          key: deps-venv-{{ .Branch }}-{{ .Environment.CIRCLE_JOB }}-v1
-      - run:
-          name: Install dependencies
-          command: |
-            python -m virtualenv venv
-            . venv/bin/activate
-            pip install PyYAML mock nose
-      - save_cache:
-          name: Save build dependency cache
-          key: deps-venv-{{ .Branch }}-{{ .Environment.CIRCLE_JOB }}-v1
-          paths:
-            - "venv"
+      - *build-checksum-file
+      - *restore-dependencies-cache
+      - *install-dependencies
+      - *save-dependencies-cache
 
       - run:
-          name: Tests
+          name: Run Tests
           command: |
-            . venv/bin/activate
-            python setup.py test
+            source venv/bin/activate
+            ./script/test
 
-  build-34: &build-template
-    docker:
-      - image: circleci/python:3.4
+  lint:
+    <<: *parametrised-python-executor
 
     steps:
       - checkout
 
-        # Set up a cached virtualenv in which to install
-      - restore_cache:
-          name: Restore build dependency cache
-          key: deps-venv-{{ .Branch }}-{{ .Environment.CIRCLE_JOB }}-v1
-      - run:
-          name: Install dependencies
-          command: |
-            python -m venv venv
-            . venv/bin/activate
-            pip install PyYAML mock nose
-      - save_cache:
-          name: Save build dependency cache
-          key: deps-venv-{{ .Branch }}-{{ .Environment.CIRCLE_JOB }}-v1
-          paths:
-            - "venv"
+      - *build-checksum-file
+      - *restore-dependencies-cache
+      - *install-dependencies
+      - *save-dependencies-cache
 
       - run:
-          name: Tests
+          name: Run Flake8
           command: |
-            . venv/bin/activate
-            python setup.py test
+            source venv/bin/activate
+            ./script/linting/lint
 
-  build-35:
-    <<: *build-template
+  release:
     docker:
       - image: circleci/python:3.5
+    steps:
+      - checkout
 
-  build-36:
-    <<: *build-template
-    docker:
-      - image: circleci/python:3.6
+      - run:
+          name: Setup virtualenv
+          command: |
+            python3 -m venv venv
+            venv/bin/pip install -r script/release/requirements.txt
 
-  build-37:
-    <<: *build-template
-    docker:
-      - image: circleci/python:3.7
+      - run:
+          name: Push to PyPI
+          command: |
+            source venv/bin/activate
+            export TWINE_USERNAME=__token__
+            export TWINE_PASSWORD=$PYPI_TOKEN
+            ./script/release/release
+
+
+workflows:
+  version: 2.1
+
+  validate:
+    jobs:
+      - test:
+          <<: *python-full-version-matrix
+      - lint:
+          <<: *python-top-and-bottom-version-matrix
+
+  release:
+    jobs:
+      - test:
+          <<: *python-full-version-matrix
+          <<: *filter-tags
+      - lint:
+          <<: *python-top-and-bottom-version-matrix
+          <<: *filter-tags
+      - release:
+          <<: *filter-tags
+          requires:
+            - test
+            - lint
