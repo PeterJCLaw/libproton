@@ -1,4 +1,3 @@
-
 import mock
 import helpers
 from libproton import ProtonHelper
