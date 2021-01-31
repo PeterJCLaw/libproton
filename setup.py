@@ -6,6 +6,11 @@ with open('README.md') as f:
 setup(
     name="libproton",
     version="3.0.1",
+    url='https://github.com/PeterJCLaw/libproton',
+    project_urls={
+        'Issue tracker': 'https://github.com/PeterJCLaw/libproton/issues',
+    },
+
     packages=find_packages(),
     description=description,
     author="Peter Law",
