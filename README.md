@@ -7,6 +7,14 @@ This is a library which simplifies the task of creating
 
 It supports Python 3.7+.
 
+## Install
+
+Install [from PyPI](https://pypi.org/project/libproton/):
+
+``` shell
+pip install libproton
+```
+
 ## API
 
 The following is a complete and minimal Proton compliant scorer, and shows
