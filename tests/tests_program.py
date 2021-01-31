@@ -3,8 +3,9 @@ from io import StringIO
 from unittest import mock
 
 import yaml
-import helpers
 from libproton import program
+
+from . import helpers
 
 
 class ProgramTests(unittest.TestCase):

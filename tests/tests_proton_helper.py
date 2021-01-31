@@ -1,8 +1,9 @@
 import unittest
 from unittest import mock
 
-import helpers
 from libproton import ProtonHelper
+
+from . import helpers
 
 
 class ProtonHelperTests(unittest.TestCase):

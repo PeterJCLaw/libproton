@@ -26,11 +26,6 @@ setup(
     ],
     license='MIT',
 
-    tests_require=[
-        'nose >=1.3, <2',
-    ],
-    test_suite='nose.collector',
-
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Console',

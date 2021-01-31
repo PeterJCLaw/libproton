@@ -3,7 +3,8 @@ import unittest
 import subprocess
 
 import yaml
-import helpers
+
+from . import helpers
 
 
 class CLITests(unittest.TestCase):

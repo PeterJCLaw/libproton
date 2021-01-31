@@ -2,4 +2,4 @@
 
 cd $(dirname $(dirname $0))
 
-python setup.py test
+python3 -m unittest "$@"
