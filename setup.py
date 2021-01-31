@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 with open('README.md') as f:
-    description = f.read()
+    long_description = f.read()
 
 setup(
     name="libproton",
@@ -12,7 +12,11 @@ setup(
     },
 
     packages=find_packages(),
-    description=description,
+
+    description="Proton-compliant match scorer library.",
+    long_description=long_description,
+    long_description_content_type='text/markdown',
+
     author="Peter Law",
     author_email="PeterJCLaw@gmail.com",
 
