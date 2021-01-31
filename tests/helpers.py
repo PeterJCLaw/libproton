@@ -1,5 +1,4 @@
 import os
-import sys
 
 import yaml
 
@@ -7,10 +6,6 @@ import yaml
 def root():
     mydir = os.path.dirname(os.path.realpath(__file__))
     return os.path.dirname(mydir)
-
-
-def path_bodge():
-    sys.path.insert(0, root())
 
 
 def tla_result_fixture(zone_number, score=0):

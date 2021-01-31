@@ -1,25 +1,12 @@
-from __future__ import print_function
+from io import StringIO
+from unittest import mock
 
-import mock
 import yaml
 import helpers
-
-try:
-    # python 2, this module's not in python 3
-    from StringIO import StringIO
-    builtin_open = '__builtin__.open'
-except ImportError:
-    # python 3, but this module _is_ in python 2 (and behaves differently)
-    from io import StringIO
-    builtin_open = 'builtins.open'
+from libproton import program
 
 
-helpers.path_bodge()
-
-from libproton import program  # isort:skip
-
-
-@mock.patch(builtin_open)
+@mock.patch('builtins.open')
 def test_get_reader_file(open_mock):
     mock_default = mock.Mock()
     open_mock.return_value = open_return = mock.Mock()
@@ -32,7 +19,7 @@ def test_get_reader_file(open_mock):
     open_mock.assert_called_once_with(file_name, 'r')
 
 
-@mock.patch(builtin_open)
+@mock.patch('builtins.open')
 def test_get_reader_default(open_mock):
     mock_default = mock.Mock()
     open_mock.return_value = mock.Mock()

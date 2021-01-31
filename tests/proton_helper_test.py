@@ -1,8 +1,7 @@
-import mock
+from unittest import mock
+
 import helpers
 from libproton import ProtonHelper
-
-helpers.path_bodge()
 
 
 def assert_load(data_to_load):
