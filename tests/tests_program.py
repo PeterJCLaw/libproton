@@ -3,6 +3,7 @@ from io import StringIO
 from unittest import mock
 
 import yaml
+
 from libproton import program
 
 from . import helpers
