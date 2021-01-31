@@ -76,4 +76,7 @@ def test_missing_file():
     nope = 'bacon'
     assert not os.path.exists(nope)
     retcode, _, _ = run(nope)
-    assert retcode == 1, "Should error when nonexistent input file '{}' is provided.".format(nope)
+    assert retcode == 1, \
+        "Should error when nonexistent input file '{}' is provided.".format(
+            nope,
+        )
