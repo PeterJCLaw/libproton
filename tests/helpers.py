@@ -21,10 +21,12 @@ def get_data(data_root, input_name):
     input_file = os.path.join(root(), data_root, input_name)
     output_file = os.path.join(root(), data_root, input_name[:-5] + '.out.yaml')
 
-    assert os.path.exists(output_file), \
-        "Missing output expectation '{1}' for input '{0}'.".format(
-            input_name,
-            output_file,
+    if not os.path.exists(output_file):
+        raise ValueError(
+            "Missing output expectation '{1}' for input '{0}'.".format(
+                input_name,
+                output_file,
+            ),
         )
 
     with open(output_file) as f:
