@@ -32,14 +32,14 @@ def assert_run(relative_path):
     return result_dict
 
 def check_by_input_file(input_name):
-    input_file, expected_output = helpers.get_data("test/data/cli", input_name)
+    input_file, expected_output = helpers.get_data("tests/data/cli", input_name)
 
     output = assert_run(input_file)
 
     assert output == expected_output, "Incorrect scores for '{0}'.".format(input_name)
 
 def test_input_file():
-    inputs = helpers.get_input_files("test/data/cli")
+    inputs = helpers.get_input_files("tests/data/cli")
 
     for input_name in inputs:
         yield check_by_input_file, input_name
@@ -48,8 +48,8 @@ def test_stdin():
     # A proton compliant program MUST consume YAML from stdin
     # if it is not given a filename.
 
-    with open('test/data/cli/zero.yaml', 'r') as zeros_input:
-        with open('test/data/cli/zero.out.yaml') as f:
+    with open('tests/data/cli/zero.yaml', 'r') as zeros_input:
+        with open('tests/data/cli/zero.out.yaml') as f:
             zeros_output = yaml.load(f)
 
         bacon_scorer = get_bacon_scorer()
