@@ -41,6 +41,6 @@ def get_data(data_root, input_name):
 def get_input_files(data_root):
     files = os.listdir(os.path.join(root(), data_root))
     outputs = [f for f in files if f.endswith('.out.yaml')]
-    inputs = [f for f in files if f.endswith('.yaml') and not f in outputs]
+    inputs = [f for f in files if f.endswith('.yaml') and f not in outputs]
 
     return inputs

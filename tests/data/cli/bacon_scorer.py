@@ -17,12 +17,13 @@ class Scorer:
         scores = {}
         for tla, value in self._teams_data.items():
             # Double the bacon and add 5, for fun
-            scores[tla] = 5 + 2*value['bacon']
+            scores[tla] = 5 + 2 * value['bacon']
         return scores
 
     def validate(self, extra_data):
         assert extra_data == 42 or extra_data is None, \
-                "Optional extra should be 42 if present"
+            "Optional extra should be 42 if present"
+
 
 if __name__ == '__main__':
     libproton.main(Scorer)
