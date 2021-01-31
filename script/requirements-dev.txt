@@ -1,0 +1,2 @@
+-r typing/requirements.txt
+-r linting/requirements.txt
