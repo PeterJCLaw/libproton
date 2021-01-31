@@ -16,10 +16,10 @@ def path_bodge():
 
 def tla_result_fixture(zone_number, score=0):
     return {
-        "score": score,
-        "present": True,
-        "disqualified": False,
-        "zone": zone_number,
+        'score': score,
+        'present': True,
+        'disqualified': False,
+        'zone': zone_number,
     }
 
 

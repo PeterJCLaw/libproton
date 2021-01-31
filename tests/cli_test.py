@@ -36,7 +36,7 @@ def assert_run(relative_path):
 
 
 def check_by_input_file(input_name):
-    input_file, expected_output = helpers.get_data("tests/data/cli", input_name)
+    input_file, expected_output = helpers.get_data('tests/data/cli', input_name)
 
     output = assert_run(input_file)
 
@@ -44,7 +44,7 @@ def check_by_input_file(input_name):
 
 
 def test_input_file():
-    inputs = helpers.get_input_files("tests/data/cli")
+    inputs = helpers.get_input_files('tests/data/cli')
 
     for input_name in inputs:
         yield check_by_input_file, input_name

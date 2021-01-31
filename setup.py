@@ -4,8 +4,8 @@ with open('README.md') as f:
     long_description = f.read()
 
 setup(
-    name="libproton",
-    version="3.0.1",
+    name='libproton',
+    version='3.0.1',
     url='https://github.com/PeterJCLaw/libproton',
     project_urls={
         'Issue tracker': 'https://github.com/PeterJCLaw/libproton/issues',
