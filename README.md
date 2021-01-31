@@ -51,4 +51,5 @@ if __name__ == '__main__:
 ~~~~
 
 ## Tests
-Run `python setup.py test` or `nosetests` from the root.
+
+Run `./script/test`.
