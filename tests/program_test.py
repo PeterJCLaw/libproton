@@ -36,9 +36,8 @@ def test_get_reader_file(open_mock):
 @mock.patch(builtin_open)
 def test_get_reader_default(open_mock):
     mock_default = mock.Mock()
-    open_mock.return_value = open_return = mock.Mock()
+    open_mock.return_value = mock.Mock()
 
-    file_name = 'bees'
     reader = program.get_reader(['self'], mock_default)
 
     assert reader is mock_default, 'Should have returned the file reader'
