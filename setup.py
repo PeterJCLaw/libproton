@@ -5,7 +5,7 @@ with open('README.md') as f:
 
 setup(
     name='libproton',
-    version='3.1',
+    version='3.2',
     url='https://github.com/PeterJCLaw/libproton',
     project_urls={
         'Issue tracker': 'https://github.com/PeterJCLaw/libproton/issues',
