@@ -30,7 +30,7 @@ def get_data(data_root, input_name):
         )
 
     with open(output_file) as f:
-        expected_output = yaml.load(f)
+        expected_output = yaml.safe_load(f)
     return input_file, expected_output
 
 

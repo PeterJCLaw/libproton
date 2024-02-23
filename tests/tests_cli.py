@@ -32,7 +32,7 @@ class CLITests(unittest.TestCase):
 
         self.assertEqual(0, retcode, "Bad return code scoring '{0}'.".format(relative_path))
 
-        result_dict = yaml.load(stdout)
+        result_dict = yaml.safe_load(stdout)
         return result_dict
 
     def test_input_file(self):
@@ -56,7 +56,7 @@ class CLITests(unittest.TestCase):
 
         with open('tests/data/cli/zero.yaml', 'r') as zeros_input:
             with open('tests/data/cli/zero.out.yaml') as f:
-                zeros_output = yaml.load(f)
+                zeros_output = yaml.safe_load(f)
 
             bacon_scorer = self.get_bacon_scorer()
             process = subprocess.Popen([bacon_scorer], stdin=zeros_input,
@@ -67,7 +67,7 @@ class CLITests(unittest.TestCase):
 
             self.assertEqual(0, process.returncode, "Bad return code scoring from stdin.")
 
-            result_dict = yaml.load(stdout)
+            result_dict = yaml.safe_load(stdout)
 
             self.assertEqual(zeros_output, result_dict, "Bad output when reading from stdin")
 

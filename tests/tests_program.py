@@ -115,7 +115,7 @@ class ProgramTests(unittest.TestCase):
         print('stdout:\n', mock_io.stdout.getvalue())
         print('stderr:\n', mock_io.stderr.getvalue())
         print(yaml.dump(expected_output))
-        output = yaml.load(mock_io.stdout.getvalue())
+        output = yaml.safe_load(mock_io.stdout.getvalue())
         self.assertEqual(expected_output, output)
 
     def test_system(self):
