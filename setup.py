@@ -22,7 +22,7 @@ setup(
 
     python_requires='>=3.7',
     install_requires=[
-        'PyYAML >=3.11, <6',
+        'PyYAML >=3.11, <7',
     ],
     license='MIT',
 
