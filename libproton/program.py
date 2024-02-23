@@ -26,7 +26,7 @@ def generate_output(file_reader, scorer_cls, stderr):
         # which come from inside the method.
         if hasattr(scorer, 'validate'):
             scorer.validate(extra_data)
-    except BaseException:
+    except BaseException:  # noqa: B036
         print(traceback.format_exc(), file=stderr)
         exit(2)
 
